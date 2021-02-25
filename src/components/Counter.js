@@ -1,33 +1,20 @@
 import React from "react";
-import { makeObservable, observable, action} from "mobx"; 
-import { observer } from "mobx-react";
+import { observer, inject } from "mobx-react";
 
-@observer // Counter 클래스를 감싸는 observer이 데코레이터를 사용 함으로써 이쪽에 선언
+@inject("counterStore", "userStore")
+@observer
 class Counter extends React.Component{
-    constructor(props) {
-        super(props);
-        makeObservable(this);
-    }
-
-    @observable //데코레이터 적용
-    number = 0; // observable state
-
-    @action //데코레이터 적용
-    increase = () =>{
-        this.number++;
-    }
-
-    @action //데코레이터 적용
-    decrease = () =>{
-        this.number--;
-    }
-
     render(){
+        const {counterStore, userStore} = this.props;
         return(
             <div>
-                <h1>{this.number}</h1>
-                <button onClick={this.increase}>+</button>
-                <button onClick={this.decrease}>-</button>
+                <h1>유저 이름 : {userStore.userName}</h1>
+                <h1>이메일 : {userStore.userEmail}</h1>
+
+                <h1>{counterStore.counter}</h1>
+                <h2> computed: {counterStore.double}</h2>
+                <button onClick={counterStore.increase}>+</button>
+                <button onClick={counterStore.decrease}>-</button>
             </div>
         );
     }
